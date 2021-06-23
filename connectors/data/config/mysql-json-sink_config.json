@@ -1,0 +1,11 @@
+{
+  "name": "mysql-fruit-json-sink",
+  "config": {
+    "connector.class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "topics": "mysql-01-fruits",
+    "file": "/var/connectors/data/output/fruit-mysql-output.json",
+    "value.converter.schemas.enable": "false"
+  }
+}

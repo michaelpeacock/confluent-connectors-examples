@@ -1,0 +1,24 @@
+{
+  "name": "mysql-csv-sink",
+  "config": {
+    "connector.class":"io.confluent.connect.jdbc.JdbcSinkConnector",
+    "tasks.max":"1",
+    "connection.url": "jdbc:mysql://mysql:3306/kafka3",
+    "connection.user": "test_user",
+    "connection.password": "test123",
+    "topics": "FRUITS_CSV_CONVERTED",
+    "key.converter": "io.confluent.connect.avro.AvroConverter",
+    "key.converter.schema.registry.url": "http://schema-registry:8081",
+    "value.converter": "io.confluent.connect.avro.AvroConverter",
+    "key.converter.schema.registry.url": "http://schema-registry:8081",
+    "value.converter.schema.registry.url": "http://schema-registry:8081",
+    "auto.create": true,
+    "pk.mode": "record_key",
+    "pk.fields": "",
+    "insert.mode": "upsert",
+    "delete.enabled": true,
+    "transforms": "copyFieldToKey",
+    "transforms.copyFieldToKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
+    "transforms.copyFieldToKey.fields": "ID"
+  }
+}

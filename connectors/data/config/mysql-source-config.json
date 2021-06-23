@@ -1,0 +1,14 @@
+{"name": "jdbc_source_mysql_01",
+        "config": {
+                "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+                "connection.url": "jdbc:mysql://mysql:3306/kafka3",
+                "connection.user": "test_user",
+                "connection.password": "test123",
+                "topic.prefix": "mysql-01-",
+                "mode":"incrementing",
+                "incrementing.column.name":"ID",
+                "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+                "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+                "value.converter.schemas.enable": "false"
+        }
+}

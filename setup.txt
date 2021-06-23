@@ -1,0 +1,83 @@
+Install connectors
+------------------
+confluent-hub install --component-dir connectors --no-prompt confluentinc/kafka-connect-jdbc:10.2.0
+
+
+CSV --> JSON
+
+MYSQL
+-----
+CREATE DATABASE kafka3;
+CREATE USER 'test_user' IDENTIFIED BY 'test123';
+GRANT ALL PRIVILEGES ON kafka3.* TO test_user with GRANT OPTION;
+
+CREATE TABLE fruits (
+  ID INT NOT NULL PRIMARY KEY,
+  name VARCHAR(255),
+  randnum INT
+);
+
+INSERT INTO fruits VALUES ("1","apple","3.2");
+INSERT INTO fruits VALUES ("2","banana","5.5");
+INSERT INTO fruits VALUES ("3","strawberry","2");
+INSERT INTO fruits VALUES ("4","mango","1000.2");
+INSERT INTO fruits VALUES ("5","kiwi","42.42");
+INSERT INTO fruits VALUES ("6","apricot","50.5");
+INSERT INTO fruits VALUES ("7","guava","20.73");
+
+
+CREATE STREAM fruits_csv (
+  ID INT,
+  name VARCHAR,
+  randnum VARCHAR)
+  WITH (KAFKA_TOPIC='fruit_csv', VALUE_FORMAT='JSON');
+
+CREATE STREAM fruits_csv_converted 
+  WITH (VALUE_FORMAT='AVRO') AS 
+  SELECT * FROM FRUITS_CSV;
+
+
+MongoDB --> JSON
+----------------
+
+mongoimport --db kafka3 --collection fruits --authenticationDatabase admin --username root --password root123 --file kafkaconnectsourcesinkmatrixandconnector/mongo_fruits.json --jsonArray
+
+docker-compose exec mongo1 /usr/bin/mongo --eval '''if (rs.status()["ok"] == 0) {
+    rsconf = {
+      _id : "rs0",
+      members: [
+        { _id : 0, host : "mongo1:27017", priority: 1.0 },
+        { _id : 1, host : "mongo2:27017", priority: 0.5 },
+        { _id : 2, host : "mongo3:27017", priority: 0.5 }
+      ]
+    };
+    rs.initiate(rsconf);
+}
+
+rs.conf();'''
+
+{"name": "mongo-sink",
+   "config": {
+     "connector.class":"com.mongodb.kafka.connect.MongoSinkConnector",
+     "tasks.max":"1",
+     "topics":"pageviews",
+     "connection.uri":"mongodb://mongo1:27017,mongo2:27017,mongo3:27017",
+     "database":"test",
+     "collection":"pageviews",
+     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+     "value.converter.schemas.enable": "false"
+}}
+
+{"name": "mongo-source",
+   "config": {
+     "tasks.max":"1",
+     "connector.class":"com.mongodb.kafka.connect.MongoSourceConnector",
+     "connection.uri":"mongodb://mongo1:27017,mongo2:27017,mongo3:27017",
+     "topic.prefix":"mongo",
+     "database":"test",
+     "collection":"pageviews",
+     "publish.full.document.only": "true"
+}}
+
+

@@ -1,0 +1,11 @@
+{
+  "name": "csv-fruit-json-sink",
+  "config": {
+    "connector.class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+    "topics": "fruit_csv",
+    "file": "/var/connectors/data/output/fruit-csv-output.json",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false"
+  }
+}
