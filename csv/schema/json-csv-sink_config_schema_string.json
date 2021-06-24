@@ -1,0 +1,10 @@
+{
+  "name": "json-schema-str-csv",
+  "config": {
+    "connector.class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+    "topics": "fruit_schema_csv",
+    "file": "/var/connectors/csv-files/output/fruit-schema-string-csv-output.json",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.storage.StringConverter"
+  }
+}

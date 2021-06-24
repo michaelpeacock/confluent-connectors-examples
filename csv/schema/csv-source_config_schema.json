@@ -1,0 +1,17 @@
+{
+  "name": "fruit-schema_csv-source2",
+  "config": {
+    "connector.class": "com.github.jcustenborder.kafka.connect.spooldir.SpoolDirCsvSourceConnector",
+    "topic": "fruit_schema_csv2",
+    "input.path": "/var/connectors/csv-files/unprocessed",
+    "finished.path": "/var/connectors/csv-files/processed",
+    "error.path": "/var/connectors/csv-files/error",
+    "input.file.pattern": ".*\\.csv",
+    "schema.generation.enabled": true,
+    "csv.first.row.as.header": true,
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "io.confluent.connect.json.JsonSchemaConverter",
+    "value.converter.schema.registry.url": "http://schema-registry:8081",
+    "value.converter.schemas.enable": false
+  }
+}

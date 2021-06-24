@@ -84,7 +84,24 @@ services:
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components,/var/connectors"
       CONNECT_LOG4J_LOGGERS: org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR
     volumes:
-      - ./connectors/:/var/connectors/
+      - ./csv/csv-files/:/var/connectors/csv-files
+    command:
+      - bash
+      - -c
+      - |
+        echo "Installing connector plugins"
+        confluent-hub install --no-prompt jcustenborder/kafka-connect-spooldir:2.0.62
+        confluent-hub install --no-prompt confluentinc/kafka-connect-jdbc:10.2.0
+        confluent-hub install --no-prompt confluentinc/kafka-connect-elasticsearch:10.0.1
+        confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.5.1
+        # JDBC Drivers
+        # ------------
+        # MySQL
+        cd /usr/share/confluent-hub-components/confluentinc-kafka-connect-jdbc/
+        # See https://dev.mysql.com/downloads/connector/j/
+        curl https://cdn.mysql.com/Downloads/Connector-J/mysql-connector-java-8.0.23.tar.gz | tar xz 
+        echo "Launching Kafka Connect worker"
+        /etc/confluent/docker/run
     
   ksqldb-server:
     image: confluentinc/cp-ksqldb-server:6.0.0
@@ -95,8 +112,6 @@ services:
       - connect
     ports:
       - "8088:8088"
-    volumes:
-      - ./ksql-extension:/etc/ksql-extension/
     environment:
       KSQL_CONFIG_DIR: "/etc/ksql"
       KSQL_KSQL_EXTENSION_DIR: "/etc/ksql-extension"
@@ -118,8 +133,6 @@ services:
       - ksqldb-server
     entrypoint: /bin/sh
     tty: true
-    volumes:
-      - ./ksqldb_scripts:/ksqldb_scripts
 
   rest-proxy:
     image: confluentinc/cp-kafka-rest:6.0.0
@@ -158,18 +171,6 @@ services:
       CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS: 1
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       PORT: 9021
-
-  # mongo:
-  #   image: mongo:4.2.5
-  #   hostname: mongo
-  #   container_name: mongo
-  #   ports:
-  #     - "27017:27017"
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: mongo-user
-  #     MONGO_INITDB_ROOT_PASSWORD: mongo-pw
-  #     MONGO_REPLICA_SET_NAME: my-replica-set
-  #   command: --replSet my-replica-set --bind_ip_all
 
   elastic:
     image: elasticsearch:7.6.2

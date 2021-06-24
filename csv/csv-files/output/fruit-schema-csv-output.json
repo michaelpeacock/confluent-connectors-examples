@@ -1,0 +1,8 @@
+Struct{ID=1,name=apple,randnum=3.2}
+Struct{ID=2,name=banana,randnum=5.5}
+Struct{ID=3,name=strawberry,randnum=2}
+Struct{ID=4,name=mango,randnum=1000.2}
+Struct{ID=5,name=kiwi,randnum=42.42}
+Struct{ID=6,name=apricot,randnum=50.5}
+Struct{ID=7,name=guava,randnum=20.73}
+Struct{ID=8,name=test,randnum=20.73}

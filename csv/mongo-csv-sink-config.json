@@ -1,0 +1,13 @@
+{"name": "mongo-fruit-sink",
+   "config": {
+     "connector.class":"com.mongodb.kafka.connect.MongoSinkConnector",
+     "tasks.max":"1",
+     "topics":"fruit_csv",
+     "connection.uri":"mongodb://mongo1:27017,mongo2:27017,mongo3:27017",
+     "database":"kafka3",
+     "collection":"fruits_csv",
+     "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+     "key.converter.schemas.enable": "false",
+     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+     "value.converter.schemas.enable": "false"
+}}

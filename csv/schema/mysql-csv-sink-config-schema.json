@@ -1,0 +1,25 @@
+{
+  "name": "mysql-csv-sink",
+  "config": {
+    "connector.class":"io.confluent.connect.jdbc.JdbcSinkConnector",
+    "tasks.max":"1",
+    "connection.url": "jdbc:mysql://mysql:3306/kafka3",
+    "connection.user": "test_user",
+    "connection.password": "test123",
+    "topics": "fruit_csv",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "auto.create": true,
+    "pk.mode": "record_key",
+    "pk.fields": "",
+    "insert.mode": "upsert",
+    "delete.enabled": true,
+    "transforms": "copyFieldToKey",
+    "transforms.copyFieldToKey.type": "org.apache.kafka.connect.transforms.ValueToKey",
+    "transforms.copyFieldToKey.fields": "id",
+    "key.schema": "{ \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"number\" } } }",
+    "value.schema": "{ \"type\": \"object\", \"properties\": { \"id\": { \"type\": \"number\" }, \"name\": { \"type\": \"string\" }, \"randnum\": { \"type\": \"number\" } } }"
+  }
+}

@@ -1,0 +1,50 @@
+[{
+  "_id": {
+    "$oid": "60abd068f6fa5324b47df1ec"
+  },
+  "ID": 1,
+  "name": "apple",
+  "randnum": 10.2
+},{
+  "_id": {
+    "$oid": "60abd068f6fa5324b47df1ed"
+  },
+  "ID": 2,
+  "name": "banana",
+  "randnum": 3.6
+},{
+  "_id": {
+    "$oid": "60abd068f6fa5324b47df1ee"
+  },
+  "ID": 3,
+  "name": "strawberry",
+  "randnum": 5.1
+},{
+  "_id": {
+    "$oid": "60abd068f6fa5324b47df1ef"
+  },
+  "ID": 4,
+  "name": "kiwi",
+  "randnum": 4.3
+},{
+  "_id": {
+    "$oid": "60abd068f6fa5324b47df1f0"
+  },
+  "ID": 5,
+  "name": "papaya",
+  "randnum": 8.8
+},{
+  "_id": {
+    "$oid": "60abd068f6fa5324b47df1f1"
+  },
+  "ID": 6,
+  "name": "mango",
+  "randnum": 2
+},{
+  "_id": {
+    "$oid": "60abd068f6fa5324b47df1f2"
+  },
+  "ID": 7,
+  "name": "lychee",
+  "randnum": 11.4
+}]

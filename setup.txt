@@ -1,29 +1,31 @@
-Install connectors
-------------------
-confluent-hub install --component-dir connectors --no-prompt confluentinc/kafka-connect-jdbc:10.2.0
-
-
-CSV --> JSON
+******************************************
 
 MYSQL
 -----
+docker exec -it mysql bash
+mysql -u root -p
+
 CREATE DATABASE kafka3;
 CREATE USER 'test_user' IDENTIFIED BY 'test123';
 GRANT ALL PRIVILEGES ON kafka3.* TO test_user with GRANT OPTION;
 
-CREATE TABLE fruits (
-  ID INT NOT NULL PRIMARY KEY,
-  name VARCHAR(255),
-  randnum INT
-);
+USE kafka3;
 
-INSERT INTO fruits VALUES ("1","apple","3.2");
-INSERT INTO fruits VALUES ("2","banana","5.5");
-INSERT INTO fruits VALUES ("3","strawberry","2");
-INSERT INTO fruits VALUES ("4","mango","1000.2");
-INSERT INTO fruits VALUES ("5","kiwi","42.42");
-INSERT INTO fruits VALUES ("6","apricot","50.5");
-INSERT INTO fruits VALUES ("7","guava","20.73");
+CREATE TABLE `fruits` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR (15),
+  `randnum` FLOAT,
+  PRIMARY KEY (`id`)
+); 
+
+INSERT INTO `fruits` (`name`, `randnum`) VALUES
+  ('apple',3.2),
+  ('banana',5.5),
+  ('strawberry',2),
+  ('mango',1000.2),
+  ('kiwi',42.42),
+  ('apricot',50.5),
+  ('guava',20.73);
 
 
 CREATE STREAM fruits_csv (
@@ -37,10 +39,10 @@ CREATE STREAM fruits_csv_converted
   SELECT * FROM FRUITS_CSV;
 
 
+******************************************
+
 MongoDB --> JSON
 ----------------
-
-mongoimport --db kafka3 --collection fruits --authenticationDatabase admin --username root --password root123 --file kafkaconnectsourcesinkmatrixandconnector/mongo_fruits.json --jsonArray
 
 docker-compose exec mongo1 /usr/bin/mongo --eval '''if (rs.status()["ok"] == 0) {
     rsconf = {
@@ -56,28 +58,9 @@ docker-compose exec mongo1 /usr/bin/mongo --eval '''if (rs.status()["ok"] == 0) 
 
 rs.conf();'''
 
-{"name": "mongo-sink",
-   "config": {
-     "connector.class":"com.mongodb.kafka.connect.MongoSinkConnector",
-     "tasks.max":"1",
-     "topics":"pageviews",
-     "connection.uri":"mongodb://mongo1:27017,mongo2:27017,mongo3:27017",
-     "database":"test",
-     "collection":"pageviews",
-     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
-     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-     "value.converter.schemas.enable": "false"
-}}
+mongoimport --db kafka3 --collection fruits --file data/mongo_fruits.json --jsonArray
 
-{"name": "mongo-source",
-   "config": {
-     "tasks.max":"1",
-     "connector.class":"com.mongodb.kafka.connect.MongoSourceConnector",
-     "connection.uri":"mongodb://mongo1:27017,mongo2:27017,mongo3:27017",
-     "topic.prefix":"mongo",
-     "database":"test",
-     "collection":"pageviews",
-     "publish.full.document.only": "true"
-}}
+
+
 
 

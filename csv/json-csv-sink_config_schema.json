@@ -1,0 +1,12 @@
+{
+  "name": "json-schema-csv-sink2",
+  "config": {
+    "connector.class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+    "topics": "fruit_schema_csv2",
+    "file": "/var/connectors/csv-files/output/fruit-schema-csv-output.json",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+     "value.converter": "io.confluent.connect.json.JsonSchemaConverter",
+    "value.converter.schema.registry.url": "http://schema-registry:8081",
+    "value.converter.schemas.enable": false
+  }
+}
